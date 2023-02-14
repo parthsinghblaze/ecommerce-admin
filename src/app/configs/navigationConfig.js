@@ -16,6 +16,14 @@ const navigationConfig = [
     icon: 'heroicons-outline:star',
     url: 'example',
   },
+  {
+    id: 'category',
+    title: 'Category',
+    translate: 'CATEGORY',
+    type: 'item',
+    icon: 'heroicons-outline:star',
+    url: 'category',
+  },
 ];
 
 export default navigationConfig;

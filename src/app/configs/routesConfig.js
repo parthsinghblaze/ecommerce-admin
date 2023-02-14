@@ -8,6 +8,7 @@ import SignUpConfig from '../main/sign-up/SignUpConfig';
 import SignOutConfig from '../main/sign-out/SignOutConfig';
 import Error404Page from '../main/404/Error404Page';
 import ExampleConfig from '../main/example/ExampleConfig';
+import Category from "../main/Category/Category";
 
 const routeConfigs = [ExampleConfig, SignOutConfig, SignInConfig, SignUpConfig];
 
@@ -18,6 +19,10 @@ const routes = [
     // element: <h1>Hello World</h1>,
     element: <Navigate to="/example" />,
     // auth: settingsConfig.defaultAuth,
+  },
+  {
+    path: '/category',
+    element: <Category />,
   },
   {
     path: 'loading',
