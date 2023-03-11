@@ -13,6 +13,7 @@ import withRouter from '@fuse/core/withRouter';
 import FuseLoading from '@fuse/core/FuseLoading';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import CategoryTableHead from "./CategoryTableHead";
+import {getCategorys} from "../store/categorySlice";
 
 const products = [
     {
@@ -34,6 +35,11 @@ function CategoryTable(props) {
     });
 
     useSelector((state) => console.log(state));
+
+    useEffect(() => {
+        dispatch(getCategorys())
+    }, [])
+
 
     if (loading) {
         return (

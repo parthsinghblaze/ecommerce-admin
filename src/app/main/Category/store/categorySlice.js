@@ -5,6 +5,8 @@ export const getCategorys = createAsyncThunk('eCommerceApp/products/getProducts'
   const response = await axios.get('/category/categorys');
   const data = await response.data;
 
+  console.log(data)
+
   return data;
 });
 
@@ -15,7 +17,7 @@ const categorySlice = createSlice({
   },
   extraReducers: {
     [getCategorys.fulfilled]: (state, action) => {
-      action.categoryList = action.payload;
+      state.categoryList = action.payload.data.categories;
     },
   },
 });
