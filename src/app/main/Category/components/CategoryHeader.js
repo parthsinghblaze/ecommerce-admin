@@ -3,12 +3,19 @@ import Input from '@mui/material/Input';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { motion } from 'framer-motion';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
+import { setSearchText } from '../store/categorySlice';
 
 function CategoryHeader(props) {
   const dispatch = useDispatch();
+
+  const { searchText } = useSelector(({ Category }) => Category.category);
+
+  function handleSearchText(e) {
+    dispatch(setSearchText(e.target.value));
+  }
 
   return (
     <div className="flex flex-col sm:flex-row space-y-16 sm:space-y-0 flex-1 w-full items-center justify-between py-32 px-24 md:px-32">
@@ -35,11 +42,11 @@ function CategoryHeader(props) {
             className="flex flex-1"
             disableUnderline
             fullWidth
-            // value={searchText}
+            value={searchText}
             inputProps={{
               'aria-label': 'Search',
             }}
-            // onChange={(ev) => dispatch(setProductsSearchText(ev))}
+            onChange={(e) => handleSearchText(e)}
           />
         </Paper>
         <motion.div

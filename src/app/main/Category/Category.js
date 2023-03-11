@@ -1,9 +1,8 @@
 import FusePageCarded from '@fuse/core/FusePageCarded';
 import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
-import CategoryHeader from "./components/CategoryHeader";
-import React from "react";
-import CategoryTable from "./components/CategoryTable";
-import withReducer from "app/store/withReducer";
+import withReducer from 'app/store/withReducer';
+import CategoryHeader from './components/CategoryHeader';
+import CategoryTable from './components/CategoryTable';
 import reducer from './store';
 
 function Category() {

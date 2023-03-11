@@ -1,8 +1,8 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import categorySlice from './categorySlice';
+import category from './categorySlice';
 
 const reducer = combineReducers({
-    categorySlice,
+  category,
 });
 
 export default reducer;
