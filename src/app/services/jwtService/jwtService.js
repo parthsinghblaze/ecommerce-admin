@@ -1,8 +1,7 @@
 import FuseUtils from '@fuse/utils/FuseUtils';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
-import constants from 'app/configs/constants';
-import jwtServiceConfig from './jwtServiceConfig';
+import constants from 'app/fuse-configs/constants';
 
 /* eslint-disable camelcase */
 
@@ -67,37 +66,47 @@ class JwtService extends FuseUtils.EventEmitter {
 
   createUser = (data) => {
     return new Promise((resolve, reject) => {
-      axios.post(jwtServiceConfig.signUp, data).then((response) => {
-        if (response.data.user) {
-          this.setSession(response.data.access_token);
-          resolve(response.data.user);
-          this.emit('onLogin', response.data.user);
-        } else {
-          reject(response.data.error);
-        }
-      });
+      axios
+        .post('/api/auth/register', data)
+        .then((response) => {
+          if (response.data.user) {
+            this.setSession(response.data.accessToken);
+            resolve({ ...response.data.user, permissions: response.data.permissions });
+          } else {
+            reject(response.data.error);
+          }
+        })
+        .catch((error) => {
+          const errors = [];
+          if (error.response === undefined) {
+            errors.push({
+              type: 'email',
+              message: 'Something is wrong! Please contact your administrator.',
+            });
+          } else {
+            errors.push({ type: 'email', message: error.response.data.errors.email });
+          }
+          reject(errors);
+        });
     });
   };
 
   signInWithEmailAndPassword = (email, password) => {
     return new Promise((resolve, reject) => {
       axios
-        .post(jwtServiceConfig.signIn, {
+        .post('/api/auth/login', {
           email,
           password,
         })
         .then((response) => {
-          console.log(response);
           if (response.data.user) {
-            this.setSession(response.data.token);
-            resolve(response.data.user);
-            this.emit('onLogin', response.data.user);
+            this.setSession(response.data.accessToken);
+            resolve({ ...response.data.user, permissions: response.data.permissions });
           } else {
             reject(response.data.error);
           }
         })
         .catch((error) => {
-          console.log('this is error', error);
           const errors = [];
           if (error.response === undefined) {
             errors.push({
@@ -115,15 +124,15 @@ class JwtService extends FuseUtils.EventEmitter {
   signInWithToken = () => {
     return new Promise((resolve, reject) => {
       axios
-        .post(jwtServiceConfig.verifyToken, {
+        .get('/api/auth/refresh', {
           data: {
             access_token: this.getAccessToken(),
           },
         })
         .then((response) => {
           if (response.data.user) {
-            this.setSession(response.data.token);
-            resolve(response.data.user);
+            this.setSession(response.data.accessToken);
+            resolve({ ...response.data.user, permissions: response.data.permissions });
           } else {
             this.logout();
             reject(new Error('Failed to login with token.'));
@@ -137,7 +146,7 @@ class JwtService extends FuseUtils.EventEmitter {
   };
 
   updateUserData = (user) => {
-    return axios.post(jwtServiceConfig.updateUser, {
+    return axios.post('/api/auth/user/update', {
       user,
     });
   };
@@ -154,7 +163,6 @@ class JwtService extends FuseUtils.EventEmitter {
 
   logout = () => {
     this.setSession(null);
-    this.emit('onLogout', 'Logged out');
   };
 
   isAuthTokenValid = (access_token) => {
