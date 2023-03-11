@@ -146,7 +146,7 @@ export const logoutUser = () => async (dispatch, getState) => {
   // }
 
   history.push({
-    pathname: '/login',
+    pathname: '/',
   });
 
   switch (user.from) {

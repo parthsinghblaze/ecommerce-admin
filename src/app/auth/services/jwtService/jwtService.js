@@ -97,7 +97,6 @@ class JwtService extends FuseUtils.EventEmitter {
           }
         })
         .catch((error) => {
-          console.log('this is error', error);
           const errors = [];
           if (error.response === undefined) {
             errors.push({
