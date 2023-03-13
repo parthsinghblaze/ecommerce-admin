@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import { setSearchText } from '../store/categorySlice';
+import {setSearchText, toggleModel} from '../store/categorySlice';
 
 function CategoryHeader(props) {
   const dispatch = useDispatch();
@@ -55,8 +55,9 @@ function CategoryHeader(props) {
         >
           <Button
             className=""
-            component={Link}
-            to="/apps/e-commerce/products/new"
+            // component={Link}
+            // to="/apps/e-commerce/products/new"
+            onClick={() => dispatch(toggleModel())}
             variant="contained"
             color="secondary"
             startIcon={<FuseSvgIcon>heroicons-outline:plus</FuseSvgIcon>}

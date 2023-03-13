@@ -3,14 +3,26 @@ import Typography from '@mui/material/Typography';
 import { motion } from 'framer-motion';
 import FuseScrollbars from '@fuse/core/FuseScrollbars';
 import { useEffect, useState } from 'react';
+import _ from '@lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { debounce } from 'lodash';
 import withRouter from '@fuse/core/withRouter';
 import FuseLoading from '@fuse/core/FuseLoading';
-import { Checkbox, TableCell, TablePagination, TableRow, Button } from '@mui/material';
+import {
+  Checkbox,
+  TableCell,
+  TablePagination,
+  TableRow,
+  Button,
+  Dialog,
+  AppBar,
+  Toolbar,
+  DialogContent,
+  TextField,
+} from '@mui/material';
+import { Controller, useForm } from 'react-hook-form';
 import CategoryTableHead from './CategoryTableHead';
-import { getCategorys } from '../store/categorySlice';
-
+import {addCategory, getCategorys, toggleModel} from '../store/categorySlice';
 
 const products = [
   {
@@ -22,7 +34,7 @@ const products = [
 function CategoryTable(props) {
   const dispatch = useDispatch();
 
-  const { categoryList, isLoading, totalCount, searchText } = useSelector(
+  const { categoryList, isLoading, totalCount, searchText, isOpen } = useSelector(
     ({ Category }) => Category.category
   );
 
@@ -30,13 +42,11 @@ function CategoryTable(props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-
   const debouncedSearch = debounce(async (query) => {
     dispatch(getCategorys({ page: page + 1, limit: rowsPerPage, keyword: searchText }));
   }, 500);
 
   useEffect(() => {
-
     // commenting the search functionality for now will implement later
 
     // if(searchText) {
@@ -46,7 +56,6 @@ function CategoryTable(props) {
     // }
 
     dispatch(getCategorys({ page: page + 1, limit: rowsPerPage, keyword: '' }));
-
   }, [page, rowsPerPage, searchText]);
 
   useEffect(() => {
@@ -59,6 +68,20 @@ function CategoryTable(props) {
 
   function handleChangeRowsPerPage(event) {
     setRowsPerPage(event.target.value);
+  }
+
+  const { handleSubmit, formState, control } = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      name: '',
+    },
+  });
+
+  const { isValid, dirtyFields, errors } = formState;
+
+  function onSubmit(formValue) {
+    console.log('submitted Value', formValue);
+    dispatch(addCategory(formValue));
   }
 
   if (isLoading) {
@@ -99,7 +122,9 @@ function CategoryTable(props) {
                   {name}
                 </TableCell>
                 <TableCell className="p-4 md:p-16" padding="none">
-                  <Button variant='contained' color='primary'>Delete</Button>
+                  <Button variant="contained" color="primary">
+                    Delete
+                  </Button>
                   <Button>Edit</Button>
                 </TableCell>
               </TableRow>
@@ -122,6 +147,43 @@ function CategoryTable(props) {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={() => dispatch(toggleModel())}>
+        <AppBar position="static" color="secondary" elevation={0}>
+          <Toolbar className="flex w-full">
+            <Typography variant="subtitle1" color="inherit">
+              Add New Category
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <form noValidate className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+          <DialogContent classes={{ root: 'p-16 sm:p-32' }}>
+            <Controller
+              name="name"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  className="mt-8 mb-16"
+                  label="Name"
+                  id="name"
+                  variant="outlined"
+                  fullWidth
+                />
+              )}
+            />
+
+            <Button
+              className=""
+              variant="contained"
+              color="secondary"
+              type="submit"
+              disabled={_.isEmpty(dirtyFields) || !isValid}
+            >
+              Add Category
+            </Button>
+          </DialogContent>
+        </form>
+      </Dialog>
     </div>
   );
 }
