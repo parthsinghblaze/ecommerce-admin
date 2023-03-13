@@ -36,11 +36,17 @@ function CategoryTable(props) {
   }, 500);
 
   useEffect(() => {
-    if(searchText) {
-      debouncedSearch();
-    } else {
-      dispatch(getCategorys({ page: page + 1, limit: rowsPerPage, keyword: '' }));
-    }
+
+    // commenting the search functionality for now will implement later
+
+    // if(searchText) {
+    //   debouncedSearch();
+    // } else {
+    //   dispatch(getCategorys({ page: page + 1, limit: rowsPerPage, keyword: '' }));
+    // }
+
+    dispatch(getCategorys({ page: page + 1, limit: rowsPerPage, keyword: '' }));
+
   }, [page, rowsPerPage, searchText]);
 
   useEffect(() => {
