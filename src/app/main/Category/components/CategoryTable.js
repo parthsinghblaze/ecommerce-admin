@@ -21,8 +21,6 @@ const products = [
 
 function CategoryTable(props) {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
-  const [selected, setSelected] = useState([]);
 
   const { categoryList, isLoading, totalCount, searchText } = useSelector(
     ({ Category }) => Category.category
@@ -31,10 +29,7 @@ function CategoryTable(props) {
   const [data, setData] = useState(categoryList);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [order, setOrder] = useState({
-    direction: 'asc',
-    id: null,
-  });
+
 
   const debouncedSearch = debounce(async (query) => {
     dispatch(getCategorys({ page: page + 1, limit: rowsPerPage, keyword: searchText }));
