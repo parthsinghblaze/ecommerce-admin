@@ -15,7 +15,8 @@ import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { useEffect } from 'react';
-import jwtService from '../../auth/services/jwtService';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginError, submitLogin } from '../../auth/store/loginSlice';
 
 /**
  * Form Validation Schema
@@ -35,6 +36,9 @@ const defaultValues = {
 };
 
 function SignInPage() {
+  const dispatch = useDispatch();
+  const login = useSelector(({ auth }) => auth.login);
+  console.log('login', login);
   const { control, formState, handleSubmit, setError, setValue } = useForm({
     mode: 'onChange',
     defaultValues,
@@ -43,25 +47,45 @@ function SignInPage() {
 
   const { isValid, dirtyFields, errors } = formState;
 
+  console.log('errrors', errors);
+
   useEffect(() => {
     setValue('email', 'admin@fusetheme.com', { shouldDirty: true, shouldValidate: true });
     setValue('password', 'admin', { shouldDirty: true, shouldValidate: true });
   }, [setValue]);
 
-  function onSubmit({ email, password }) {
-    jwtService
-      .signInWithEmailAndPassword(email, password)
-      .then((user) => {
-        // No need to do anything, user data will be set at app/auth/AuthContext
-      })
-      .catch((_errors) => {
-        _errors.forEach((error) => {
-          setError(error.type, {
-            type: 'manual',
-            message: error.message,
-          });
-        });
+  useEffect(() => {
+    if (login.errors.length !== 0) {
+      setError('password', {
+        type: 'manual',
+        message: login.errors,
       });
+    }
+  }, [login.errors, setError]);
+
+  function onSubmit(modal) {
+    dispatch(loginError(''));
+    dispatch(submitLogin(modal))
+      .then((r) => {
+        console.log('success');
+      })
+      .catch((e) => {
+        console.log('this is error', e);
+      });
+    // jwtService
+    //   .signInWithEmailAndPassword(email, password)
+    //   .then((user) => {
+    //     // No need to do anything, user data will be set at app/auth/AuthContext
+    //   })
+    //   .catch((_errors) => {
+    //     console.log("_errors", _errors)
+    //     _errors.forEach((error) => {
+    //       setError(error.type, {
+    //         type: 'manual',
+    //         message: error.message,
+    //       });
+    //     });
+    //   });
   }
 
   return (
