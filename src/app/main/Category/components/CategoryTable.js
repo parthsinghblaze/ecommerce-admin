@@ -105,21 +105,29 @@ function CategoryTable(props) {
     );
   }
 
+  console.log('env url', process.env.REACT_APP_DEV_API_DOMAIN);
+
   return (
     <div className="w-full flex flex-col min-h-full">
       <FuseScrollbars className="grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
           <CategoryTableHead />
           {data.map((item) => {
-            const { name } = item;
+            const { name, image, type } = item;
 
             return (
               <TableRow>
-                <TableCell className="p-4 md:p-16" padding="none">
+                <TableCell className="p-4 md:p-16 flex" padding="none">
                   <Checkbox onClick={(event) => event.stopPropagation()} />
                 </TableCell>
                 <TableCell className="p-4 md:p-16" padding="none">
+                  <img alt='hello' src={`${process.env.REACT_APP_DEV_API_DOMAIN}${image}`} className='w-[50px] h-[50px]' />
+                </TableCell>
+                <TableCell className="p-4 md:p-16" padding="none">
                   {name}
+                </TableCell>
+                <TableCell className="p-4 md:p-16" padding="none">
+                  {type}
                 </TableCell>
                 <TableCell className="p-4 md:p-16" padding="none">
                   <Button variant="contained" color="primary">

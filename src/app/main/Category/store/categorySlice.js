@@ -6,7 +6,7 @@ export const getCategorys = createAsyncThunk(
   'categories',
   async ({ page, limit, keyword }, { dispatch }) => {
 
-    const response = await axios.get(`/category/categorys?page=${page}&limit=${limit}&keyword=${keyword}`);
+    const response = await axios.get(`admin/category/categories?page=${page}&limit=${limit}&keyword=${keyword}`);
     const data = await response.data;
 
     dispatch(setTotalCount(data.total));

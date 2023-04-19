@@ -10,10 +10,24 @@ import { lighten } from '@mui/material/styles';
 
 const rows = [
   {
+    id: 'image',
+    align: 'left',
+    disablePadding: false,
+    label: 'Image',
+    sort: true,
+  },
+  {
     id: 'name',
     align: 'left',
     disablePadding: false,
     label: 'Name',
+    sort: true,
+  },
+  {
+    id: 'type',
+    align: 'left',
+    disablePadding: false,
+    label: 'Category Type',
     sort: true,
   },
   {
