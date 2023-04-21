@@ -3,6 +3,15 @@ import axios from 'axios';
 import { showMessage } from 'app/store/fuse/messageSlice';
 import { mutate } from 'swr';
 
+async function fetchCategory() {
+  const page = 0;
+  const rowsPerPage = 10;
+  const searchText = '';
+  await mutate(
+      `admin/category/categories?page=${page}&limit=${rowsPerPage}&keyword=${searchText}`
+  );
+}
+
 export const addCategory = createAsyncThunk(
   'categories/add',
   async ({ formData, reset, setPreviewImage }, { dispatch }) => {
@@ -12,10 +21,7 @@ export const addCategory = createAsyncThunk(
 
       if (jsonData.status === 200) {
         dispatch(showMessage({ message: jsonData.data.message }));
-        const page = 0;
-        const rowsPerPage = 10;
-        const searchText = '';
-        mutate(`admin/category/categories?page=${page}&limit=${rowsPerPage}&keyword=${searchText}`);
+        await fetchCategory();
         dispatch(toggleModel());
         reset();
         setPreviewImage('');
@@ -55,22 +61,14 @@ const categorySlice = createSlice({
       state.categoryList = action.payload.data.categories;
       state.totalCount = action.payload.total;
     },
+    removeError: (state, action) => {
+      state.error = '';
+    },
   },
   extraReducers: {
-    // [getCategorys.pending]: (state, action) => {
-    //   state.isLoading = true;
-    // },
-    // [getCategorys.fulfilled]: (state, action) => {
-    //   state.isLoading = false;
-    //   state.categoryList = action.payload.data.categories;
-    // },
-    // [getCategorys.rejected]: (state, action) => {
-    //   state.isLoading = false;
-    //   state.categoryList = [];
-    // },
   },
 });
 
-export const { setTotalCount, setSearchText, toggleModel, setCategoryList, setError } = categorySlice.actions;
+export const { setTotalCount, setSearchText, toggleModel, setCategoryList, setError, removeError } = categorySlice.actions;
 
 export default categorySlice.reducer;

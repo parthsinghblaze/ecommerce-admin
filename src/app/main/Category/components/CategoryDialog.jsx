@@ -1,20 +1,19 @@
 import { AppBar, Button, Dialog, DialogContent, Icon, TextField, Toolbar } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Controller, useForm } from 'react-hook-form';
-import _ from '@lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import FuseUtils from '@fuse/utils';
 import clsx from 'clsx';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { Autocomplete } from '@mui/lab';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { addCategory, toggleModel } from '../store/categorySlice';
+import {addCategory, removeError, toggleModel} from '../store/categorySlice';
 
 const categorySchema = yup.object().shape({
-  name: yup.string().required('Category Name is require'),
+  name: yup.string().required('Category Name is required'),
   image: yup.mixed().required('File is required'),
-  type: yup.string().required('Type is require'),
+  type: yup.string().required('Type is required'),
 });
 
 const categoryType = ['mens', 'womens', 'kids'];
@@ -38,9 +37,7 @@ function CategoryDialog() {
     resolver: yupResolver(categorySchema),
   });
 
-  const { isValid, dirtyFields, errors } = formState;
-
-  console.log('errors =====>', errors);
+  const { errors } = formState;
 
   // handle submit
 
@@ -56,6 +53,12 @@ function CategoryDialog() {
       setLoading(false);
     });
   }
+
+  useEffect(() => {
+    return () => {
+      dispatch(removeError());
+    }
+  }, []);
 
   return (
     <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={() => dispatch(toggleModel())}>
@@ -100,11 +103,11 @@ function CategoryDialog() {
                   options={categoryType}
                   onChange={(event, value) => {
                     console.log('value', value);
-                    if(value) {
+                    if (value) {
                       field.onChange(value);
                       setValue('type', value);
                     } else {
-                      setValue('type', '')
+                      setValue('type', '');
                     }
                   }}
                   renderInput={(params) => (
@@ -124,8 +127,6 @@ function CategoryDialog() {
             <Controller
               name="image"
               control={control}
-                // error={errors?.image}
-              // helperText={errors.image?.message}
               render={({ field: { onChange, value } }) => (
                 <label
                   htmlFor="button-file"
@@ -166,7 +167,6 @@ function CategoryDialog() {
 
                       setPreviewImage(newImage.url);
                     }}
-
                   />
                   <Icon fontSize="large" color="action">
                     cloud_upload
@@ -174,7 +174,7 @@ function CategoryDialog() {
                 </label>
               )}
             />
-            <p className='text-red-500'>{errors?.image && errors.image?.message}</p>
+            <p className="text-red-500">{errors?.image && errors.image?.message}</p>
 
             {previewImage && (
               <div

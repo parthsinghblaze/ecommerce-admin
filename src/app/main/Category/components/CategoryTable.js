@@ -55,6 +55,7 @@ function CategoryTable(props) {
       </div>
     );
   }
+
   if (data.length === 0) {
     return (
       <motion.div
@@ -70,7 +71,7 @@ function CategoryTable(props) {
   }
 
   return (
-    <div className="w-full flex flex-col min-h-full">
+      <div className="w-full flex flex-col min-h-full">
       <FuseScrollbars className="grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
           <CategoryTableHead />
@@ -105,6 +106,7 @@ function CategoryTable(props) {
           })}
         </Table>
       </FuseScrollbars>
+
       <TablePagination
         className="shrink-0 border-t-1"
         component="div"
