@@ -40,9 +40,6 @@ const rows = [
 ];
 
 function CategoryTableHead(props) {
-  const [selectedProductsMenu, setSelectedProductsMenu] = useState(null);
-
-  const dispatch = useDispatch();
 
   return (
     <TableHead>

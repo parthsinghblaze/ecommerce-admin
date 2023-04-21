@@ -1,41 +1,31 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { showMessage } from 'app/store/fuse/messageSlice';
+import { mutate } from 'swr';
 
-export const getCategorys = createAsyncThunk(
-  'categories',
-  async ({ page, limit, keyword }, { dispatch }) => {
+export const addCategory = createAsyncThunk(
+  'categories/add',
+  async ({ formData, reset, setPreviewImage }, { dispatch }) => {
+    try {
+      const response = await axios.post(`/admin/category`, formData);
+      const jsonData = await response;
 
-    const response = await axios.get(`admin/category/categories?page=${page}&limit=${limit}&keyword=${keyword}`);
-    const data = await response.data;
-
-    dispatch(setTotalCount(data.total));
-
-    return data;
+      if (jsonData.status === 200) {
+        dispatch(showMessage({ message: jsonData.data.message }));
+        const page = 0;
+        const rowsPerPage = 10;
+        const searchText = '';
+        mutate(`admin/category/categories?page=${page}&limit=${rowsPerPage}&keyword=${searchText}`);
+        dispatch(toggleModel());
+        reset();
+        setPreviewImage('');
+      }
+    } catch (error) {
+      // dispatch(toggleModel());
+      dispatch(setError({ message: error.response.data.message }));
+    }
   }
 );
-
-export const addCategory = createAsyncThunk('categories/add', async (formValue, { dispatch }) => {
-
-  try {
-    const response = await axios.post(`/categorysss`, formValue);
-    const jsonData = await response;
-
-    console.log('data', jsonData);
-
-    if(jsonData.status === 200) {
-      console.log('hello i am status 200')
-      dispatch(showMessage({ message: jsonData.data.message }));
-      dispatch(getCategorys({ page: 1, limit: 10, keyword: '' }));
-      dispatch(toggleModel());
-    }
-
-  } catch (error) {
-    dispatch(toggleModel());
-    dispatch(showMessage({ message: error.response.data.message }));
-  }
-
-})
 
 const categorySlice = createSlice({
   name: 'category',
@@ -45,8 +35,12 @@ const categorySlice = createSlice({
     categoryList: [],
     totalCount: 0,
     isOpen: false,
+    error: '',
   },
   reducers: {
+    setError: (state, action) => {
+      state.error = action.payload.message;
+    },
     setTotalCount: (state, action) => {
       state.totalCount = action.payload;
     },
@@ -56,22 +50,27 @@ const categorySlice = createSlice({
     toggleModel: (state, action) => {
       state.isOpen = !state.isOpen;
     },
-  },
-  extraReducers: {
-    [getCategorys.pending]: (state, action) => {
-      state.isLoading = true;
-    },
-    [getCategorys.fulfilled]: (state, action) => {
+    setCategoryList: (state, action) => {
       state.isLoading = false;
       state.categoryList = action.payload.data.categories;
+      state.totalCount = action.payload.total;
     },
-    [getCategorys.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.categoryList = [];
-    },
+  },
+  extraReducers: {
+    // [getCategorys.pending]: (state, action) => {
+    //   state.isLoading = true;
+    // },
+    // [getCategorys.fulfilled]: (state, action) => {
+    //   state.isLoading = false;
+    //   state.categoryList = action.payload.data.categories;
+    // },
+    // [getCategorys.rejected]: (state, action) => {
+    //   state.isLoading = false;
+    //   state.categoryList = [];
+    // },
   },
 });
 
-export const { setTotalCount, setSearchText, toggleModel } = categorySlice.actions;
+export const { setTotalCount, setSearchText, toggleModel, setCategoryList, setError } = categorySlice.actions;
 
 export default categorySlice.reducer;
