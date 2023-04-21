@@ -18,7 +18,7 @@ const categorySchema = yup.object().shape({
 
 const categoryType = ['mens', 'womens', 'kids'];
 
-function CategoryDialog() {
+function AddCategoryDialog() {
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
@@ -204,4 +204,4 @@ function CategoryDialog() {
   );
 }
 
-export default CategoryDialog;
+export default AddCategoryDialog;

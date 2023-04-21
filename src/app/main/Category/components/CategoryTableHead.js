@@ -15,6 +15,7 @@ const rows = [
     disablePadding: false,
     label: 'Image',
     sort: true,
+    width: 60,
   },
   {
     id: 'name',
@@ -42,20 +43,8 @@ const rows = [
 function CategoryTableHead(props) {
 
   return (
-    <TableHead>
+    <TableHead style={{ position: 'sticky', top: 0, left: 0 }}>
       <TableRow className="h-48 sm:h-64">
-        <TableCell
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? lighten(theme.palette.background.default, 0.4)
-                : lighten(theme.palette.background.default, 0.02),
-          }}
-          padding="none"
-          className="w-40 text-center z-99"
-        >
-          <Checkbox />
-        </TableCell>
         {rows.map((row) => {
           return (
             <TableCell
@@ -65,6 +54,7 @@ function CategoryTableHead(props) {
                     ? lighten(theme.palette.background.default, 0.4)
                     : lighten(theme.palette.background.default, 0.02),
               }}
+              width={row.width}
               className="p-4 md:p-16"
               key={row.id}
               align={row.align}

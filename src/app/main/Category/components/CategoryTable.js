@@ -6,27 +6,42 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import withRouter from '@fuse/core/withRouter';
 import FuseLoading from '@fuse/core/FuseLoading';
-import { Checkbox, TableCell, TablePagination, TableRow, Button } from '@mui/material';
+import { TableCell, TablePagination, TableRow, Button } from '@mui/material';
 import useSWR from 'swr';
 import CategoryTableHead from './CategoryTableHead';
-import { setCategoryList } from '../store/categorySlice';
-import CategoryDialog from './CategoryDialog';
-import { getCategory } from "../fetch-api/api";
+import {deleteCategory, openEditDialog, setCategoryList} from '../store/categorySlice';
+import AddCategoryDialog from './AddCategoryDialog';
+import { getCategory } from '../fetch-api/api';
+import CategoryConfirmDialog from './CategoryConfirmDialog';
+import EditCategoryDialog from "./EditCategoryDialog";
 
 function CategoryTable(props) {
   const dispatch = useDispatch();
 
-  const { categoryList, totalCount, searchText } = useSelector(
-    ({ Category }) => Category.category
-  );
+  const { categoryList, totalCount, searchText } = useSelector(({ Category }) => Category.category);
 
   const [data, setData] = useState(categoryList);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [open, setOpen] = useState(false);
+  const [categoryID, setCategoryID] = useState(null);
+
+  function handleConfirmDialog() {
+    setOpen(!open);
+  }
+
+  function showModel(id) {
+    setCategoryID(id);
+    handleConfirmDialog();
+  }
 
   useEffect(() => {
     setData(categoryList);
   }, [categoryList]);
+
+  function deleteCategoryItem() {
+    dispatch(deleteCategory({ categoryID, handleConfirmDialog, page, rowsPerPage, searchText }));
+  }
 
   function handleChangePage(event, value) {
     setPage(value);
@@ -40,7 +55,10 @@ function CategoryTable(props) {
     data: myData,
     error,
     isLoading: myLoading,
-  } = useSWR(`admin/category/categories?page=${page}&limit=${rowsPerPage}&keyword=${searchText}`, getCategory);
+  } = useSWR(
+    `admin/category/categories?page=${page}&limit=${rowsPerPage}&keyword=${searchText}`,
+    getCategory
+  );
 
   useEffect(() => {
     if (myData) {
@@ -71,17 +89,14 @@ function CategoryTable(props) {
   }
 
   return (
-      <div className="w-full flex flex-col min-h-full">
+    <div className="w-full min-h-full">
       <FuseScrollbars className="grow overflow-x-auto">
-        <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
+        <Table stickyHeader aria-labelledby="tableTitle">
           <CategoryTableHead />
           {data.map((item) => {
-            const { name, image, type } = item;
+            const { _id, name, image, type } = item;
             return (
               <TableRow>
-                <TableCell className="p-4 md:p-16 flex" padding="none">
-                  <Checkbox onClick={(event) => event.stopPropagation()} />
-                </TableCell>
                 <TableCell className="p-4 md:p-16" padding="none">
                   <img
                     alt="hello"
@@ -96,10 +111,10 @@ function CategoryTable(props) {
                   {type}
                 </TableCell>
                 <TableCell className="p-4 md:p-16" padding="none">
-                  <Button variant="contained" color="primary">
+                  <Button variant="contained" color="primary" onClick={() => showModel(_id)}>
                     Delete
                   </Button>
-                  <Button>Edit</Button>
+                  <Button onClick={() => dispatch(openEditDialog(item))}>Edit</Button>
                 </TableCell>
               </TableRow>
             );
@@ -122,7 +137,13 @@ function CategoryTable(props) {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      <CategoryDialog />
+      <AddCategoryDialog />
+      <EditCategoryDialog />
+      <CategoryConfirmDialog
+        open={open}
+        handleConfirmDialog={handleConfirmDialog}
+        deleteCategoryItem={deleteCategoryItem}
+      />
     </div>
   );
 }
