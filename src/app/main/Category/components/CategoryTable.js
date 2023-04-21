@@ -89,14 +89,14 @@ function CategoryTable(props) {
   }
 
   return (
-    <div className="w-full min-h-full">
+    <div className="w-full flex flex-col min-h-full">
       <FuseScrollbars className="grow overflow-x-auto">
-        <Table stickyHeader aria-labelledby="tableTitle">
+        <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
           <CategoryTableHead />
           {data.map((item) => {
             const { _id, name, image, type } = item;
             return (
-              <TableRow>
+              <TableRow key={_id}>
                 <TableCell className="p-4 md:p-16" padding="none">
                   <img
                     alt="hello"
