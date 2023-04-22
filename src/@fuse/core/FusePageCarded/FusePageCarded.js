@@ -31,7 +31,6 @@ const Root = styled('div')(({ theme, ...props }) => ({
     minWidth: 0,
     height: '100%',
     backgroundColor: theme.palette.background.paper,
-
     ...(props.scroll === 'content' && {
       position: 'absolute',
       top: 0,
@@ -210,7 +209,7 @@ const FusePageCarded = forwardRef((props, ref) => {
       >
         {props.header && <FusePageCardedHeader header={props.header} />}
 
-        <div className="flex flex-auto flex-col container z-10 h-full shadow-1 rounded-t-16 relative overflow-hidden">
+        <div className="flex flex-auto flex-col container z-10 h-full shadow-1 rounded-t-16 relative overflow-hidden" style={{ width: '95%' }}>
           <div className="FusePageCarded-wrapper">
             {props.leftSidebarContent && (
               <FusePageCardedSidebar
