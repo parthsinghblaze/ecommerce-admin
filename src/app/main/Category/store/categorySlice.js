@@ -8,7 +8,9 @@ async function fetchCategory({ page, rowsPerPage, searchText }) {
   const pageNumber = page || 1;
   const rowsPerPageView = rowsPerPage || 10;
   const searchTextValue = searchText || '';
-  await mutate(`admin/category/categories?page=${pageNumber}&limit=${rowsPerPageView}&keyword=${searchTextValue}`);
+  await mutate(
+    `admin/category/categories?page=${pageNumber}&limit=${rowsPerPageView}&keyword=${searchTextValue}`
+  );
 }
 
 export const addCategory = createAsyncThunk(
@@ -50,6 +52,29 @@ export const deleteCategory = createAsyncThunk(
   }
 );
 
+export const updateCategory = createAsyncThunk(
+  'categories/update',
+  async ({ categoryID, formData, reset, setPreviewImage, setLoading, page, rowsPerPage  }, { dispatch }) => {
+    try {
+      const response = await axios.patch(`/admin/category/${categoryID}`, formData);
+      const jsonData = await response;
+
+      if (jsonData.status === 200) {
+        dispatch(showMessage({ message: jsonData.data.message }));
+        await fetchCategory({ page: page, rowsPerPage: rowsPerPage, searchText: '' });
+        dispatch(closeEditDialog());
+        reset();
+        setPreviewImage('');
+        setLoading(false);
+      }
+    } catch (error) {
+      // dispatch(toggleModel());
+      setLoading(false);
+      dispatch(setError({ message: error.response.data.message }));
+    }
+  }
+);
+
 const categorySlice = createSlice({
   name: 'category',
   initialState: {
@@ -60,7 +85,7 @@ const categorySlice = createSlice({
     isOpen: false,
     error: '',
     editDialogOpen: false,
-    editDialogValue: {}
+    editDialogValue: {},
   },
   reducers: {
     setError: (state, action) => {
@@ -85,17 +110,25 @@ const categorySlice = createSlice({
     },
     openEditDialog: (state, action) => {
       state.editDialogOpen = true;
-      state.editDialogValue = action.payload
+      state.editDialogValue = action.payload;
     },
     closeEditDialog: (state, action) => {
       state.editDialogOpen = false;
       state.editDialogValue = {};
-    }
+    },
   },
   extraReducers: {},
 });
 
-export const { setTotalCount, setSearchText, toggleModel, setCategoryList, setError, removeError, openEditDialog, closeEditDialog } =
-  categorySlice.actions;
+export const {
+  setTotalCount,
+  setSearchText,
+  toggleModel,
+  setCategoryList,
+  setError,
+  removeError,
+  openEditDialog,
+  closeEditDialog,
+} = categorySlice.actions;
 
 export default categorySlice.reducer;

@@ -18,7 +18,7 @@ import EditCategoryDialog from './EditCategoryDialog';
 function CategoryTable(props) {
   const dispatch = useDispatch();
 
-  const { categoryList, totalCount, searchText } = useSelector(({ Category }) => Category.category);
+  const { categoryList, totalCount, searchText, editDialogOpen } = useSelector(({ Category }) => Category.category);
 
   const [data, setData] = useState(categoryList);
   const [page, setPage] = useState(0);
@@ -111,12 +111,20 @@ function CategoryTable(props) {
                     <Button
                       className="static"
                       variant="contained"
-                      color="primary"
+                      color="error"
                       onClick={() => showModel(_id)}
                     >
                       Delete
                     </Button>
-                    <Button className="static" onClick={() => dispatch(openEditDialog(item))}>
+                    <Button
+                      className="static mx-12"
+                      variant="contained"
+                      color="warning"
+
+                      onClick={() => {
+                        dispatch(openEditDialog(item));
+                      }}
+                    >
                       Edit
                     </Button>
                   </TableCell>
@@ -143,7 +151,9 @@ function CategoryTable(props) {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
       <AddCategoryDialog />
-      <EditCategoryDialog />
+      {
+        editDialogOpen && <EditCategoryDialog rowsPerPage={rowsPerPage} page={page + 1} />
+      }
       <CategoryConfirmDialog
         open={open}
         handleConfirmDialog={handleConfirmDialog}

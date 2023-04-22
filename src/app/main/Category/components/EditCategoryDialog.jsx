@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { Autocomplete } from '@mui/lab';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import {closeEditDialog, removeError, toggleModel} from '../store/categorySlice';
+import { closeEditDialog, removeError, updateCategory } from '../store/categorySlice';
 
 const categorySchema = yup.object().shape({
   name: yup.string().required('Category Name is required'),
@@ -18,22 +18,22 @@ const categorySchema = yup.object().shape({
 
 const categoryType = ['mens', 'womens', 'kids'];
 
-function EditCategoryDialog() {
+function EditCategoryDialog({ page, rowsPerPage }) {
   const dispatch = useDispatch();
 
+  console.log('page', {page, rowsPerPage});
+
   const [loading, setLoading] = useState(false);
-  const { editDialogOpen, error } = useSelector(({ Category }) => Category.category);
+  const { editDialogOpen, error, editDialogValue } = useSelector(
+    ({ Category }) => Category.category
+  );
   const [previewImage, setPreviewImage] = useState('');
 
   // Form initial syntax
 
   const { handleSubmit, formState, control, watch, setValue, getValues, reset } = useForm({
     mode: 'onChange',
-    defaultValues: {
-      name: '',
-      image: '',
-      type: '',
-    },
+    defaultValues: editDialogValue,
     resolver: yupResolver(categorySchema),
   });
 
@@ -45,14 +45,28 @@ function EditCategoryDialog() {
     setLoading(true);
     const formData = new FormData();
 
+    const categoryID = getValues()._id;
+
     formData.append('name', getValues().name);
     formData.append('image', getValues().image);
     formData.append('type', getValues().type);
 
-    // dispatch(addCategory({ formData, reset, setPreviewImage })).then((resp) => {
-    //   setLoading(false);
-    // });
+    dispatch(
+      updateCategory({
+        categoryID,
+        formData,
+        reset,
+        setPreviewImage,
+        setLoading,
+        page,
+        rowsPerPage,
+      })
+    );
   }
+
+  useEffect(() => {
+    setPreviewImage(getValues().image);
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -61,11 +75,16 @@ function EditCategoryDialog() {
   }, []);
 
   return (
-    <Dialog fullWidth maxWidth="sm" open={editDialogOpen} onClose={() => dispatch(closeEditDialog())}>
-      <AppBar position="static" color="secondary" elevation={0}>
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      open={editDialogOpen}
+      onClose={() => dispatch(closeEditDialog())}
+    >
+      <AppBar position="static" color="primary" elevation={0}>
         <Toolbar className="flex w-full">
           <Typography variant="subtitle1" color="inherit">
-            Add New Category
+            Update Category
           </Typography>
         </Toolbar>
       </AppBar>
@@ -192,11 +211,11 @@ function EditCategoryDialog() {
           <Button
             className=""
             variant="contained"
-            color="secondary"
+            color="primary"
             type="submit"
             // disabled={_.isEmpty(dirtyFields) || !isValid}
           >
-            {loading ? 'Adding...' : 'Add Category'}
+            {loading ? 'Updating...' : 'Update Category'}
           </Button>
         </DialogContent>
       </form>
