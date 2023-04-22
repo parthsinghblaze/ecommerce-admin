@@ -12,8 +12,8 @@ function Category() {
     <FusePageCarded
       header={<CategoryHeader />}
       content={<CategoryTable />}
-      scroll='content'
-      // scroll={isMobile ? 'normal' : 'content'}
+      // scroll='content'
+      scroll={isMobile ? 'normal' : 'content'}
     />
   );
 }
