@@ -4,7 +4,7 @@ import { showMessage } from 'app/store/fuse/messageSlice';
 import { mutate } from 'swr';
 
 async function fetchCategory({ page, rowsPerPage, searchText }) {
-  const pageNumber = page || 0;
+  const pageNumber = page || 1;
   const rowsPerPageView = rowsPerPage || 10;
   const searchTextValue = searchText || '';
   await mutate(`admin/category/categories?page=${pageNumber}&limit=${rowsPerPageView}&keyword=${searchTextValue}`);

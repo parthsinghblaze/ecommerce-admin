@@ -21,7 +21,7 @@ function CategoryTable(props) {
   const { categoryList, totalCount, searchText } = useSelector(({ Category }) => Category.category);
 
   const [data, setData] = useState(categoryList);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [open, setOpen] = useState(false);
   const [categoryID, setCategoryID] = useState(null);
@@ -111,10 +111,10 @@ function CategoryTable(props) {
                   {type}
                 </TableCell>
                 <TableCell className="p-4 md:p-16" padding="none">
-                  <Button variant="contained" color="primary" onClick={() => showModel(_id)}>
+                  <Button className='static' variant="contained" color="primary" onClick={() => showModel(_id)}>
                     Delete
                   </Button>
-                  <Button onClick={() => dispatch(openEditDialog(item))}>Edit</Button>
+                  <Button className='static' onClick={() => dispatch(openEditDialog(item))}>Edit</Button>
                 </TableCell>
               </TableRow>
             );
@@ -123,7 +123,7 @@ function CategoryTable(props) {
       </FuseScrollbars>
 
       <TablePagination
-        className="shrink-0 border-t-1"
+        className="flex-shrink-0  border-t-1"
         component="div"
         count={totalCount}
         rowsPerPage={rowsPerPage}
