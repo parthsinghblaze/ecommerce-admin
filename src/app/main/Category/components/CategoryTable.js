@@ -100,7 +100,7 @@ function CategoryTable(props) {
                 <TableCell className="p-4 md:p-16" padding="none">
                   <img
                     alt="hello"
-                    src={`${process.env.REACT_APP_DEV_API_DOMAIN}${image}`}
+                    src={image}
                     className="w-[50px] h-[50px]"
                   />
                 </TableCell>
