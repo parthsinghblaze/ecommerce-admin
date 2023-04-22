@@ -41,7 +41,7 @@ const rows = [
     disablePadding: false,
     label: 'Action',
     sort: true,
-    width: 200,
+    width: 400,
   },
 ];
 
