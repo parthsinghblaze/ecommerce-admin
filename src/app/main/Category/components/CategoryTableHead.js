@@ -43,8 +43,8 @@ const rows = [
 function CategoryTableHead(props) {
 
   return (
-    <TableHead style={{ position: 'sticky', top: 0, left: 0 }}>
-      <TableRow className="h-48 sm:h-64">
+    <TableHead >
+      <TableRow className="h-48 sm:h-64 sticky left-0 w-[100%] top-0 left-0">
         {rows.map((row) => {
           return (
             <TableCell

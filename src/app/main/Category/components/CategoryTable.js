@@ -91,7 +91,7 @@ function CategoryTable(props) {
   return (
     <div className="w-full flex flex-col min-h-full">
       <FuseScrollbars className="grow overflow-x-auto">
-        <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
+        <Table className="min-w-xl relative" aria-labelledby="tableTitle">
           <CategoryTableHead />
           {data.map((item) => {
             const { _id, name, image, type } = item;
