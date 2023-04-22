@@ -1,19 +1,37 @@
 import FusePageCarded from '@fuse/core/FusePageCarded';
-import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
+import { styled } from '@mui/material/styles';
 import withReducer from 'app/store/withReducer';
 import CategoryHeader from './components/CategoryHeader';
 import CategoryTable from './components/CategoryTable';
 import reducer from './store';
 
 function Category() {
-  const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
+
+  const Root = styled(FusePageCarded)(({ theme }) => ({
+    '& .FusePageCarded-header': {
+      minHeight: 72,
+      height: 72,
+      alignItems: 'center',
+      [theme.breakpoints.up('sm')]: {
+        minHeight: 136,
+        height: 136,
+      },
+    },
+    '& .FusePageCarded-content': {
+      display: 'flex',
+    },
+    '& .FusePageCarded-contentCard': {
+      overflow: 'hidden',
+    },
+  }));
+
 
   return (
-    <FusePageCarded
+    <Root
       header={<CategoryHeader />}
       content={<CategoryTable />}
       // scroll='content'
-      scroll={isMobile ? 'normal' : 'content'}
+      innerScroll
     />
   );
 }
