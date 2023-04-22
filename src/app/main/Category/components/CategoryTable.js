@@ -90,7 +90,7 @@ function CategoryTable(props) {
 
   return (
     <div className="w-full flex flex-col min-h-full">
-      <FuseScrollbars className="grow overflow-x-auto">
+      <FuseScrollbars className="grow overflow-auto">
         <Table className="min-w-xl" stickyHeader aria-labelledby="tableTitle">
           <CategoryTableHead />
           {data.map((item) => {
