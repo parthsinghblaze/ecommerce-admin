@@ -14,7 +14,7 @@ function Category() {
       header={<CategoryHeader />}
       content={<CategoryTable />}
       // scroll='content'
-      scroll={isMobile ? 'normal' : 'content'}
+      scroll={isMobile ? 'page' : 'content'}
     />
   );
 }
