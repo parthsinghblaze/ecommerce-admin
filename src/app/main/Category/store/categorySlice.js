@@ -5,7 +5,7 @@ import { mutate } from 'swr';
 
 async function fetchCategory({ page, rowsPerPage, searchText }) {
   console.log('query', { page, rowsPerPage, searchText });
-  const pageNumber = page || 0;
+  const pageNumber = page || 1;
   const rowsPerPageView = rowsPerPage || 10;
   const searchTextValue = searchText || '';
   await mutate(`admin/category/categories?page=${pageNumber}&limit=${rowsPerPageView}&keyword=${searchTextValue}`);
@@ -20,7 +20,7 @@ export const addCategory = createAsyncThunk(
 
       if (jsonData.status === 200) {
         dispatch(showMessage({ message: jsonData.data.message }));
-        await fetchCategory({ page: 0, rowsPerPage: 10, searchText: '' });
+        await fetchCategory({ page: 1, rowsPerPage: 10, searchText: '' });
         dispatch(toggleModel());
         reset();
         setPreviewImage('');
