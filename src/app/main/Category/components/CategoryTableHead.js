@@ -23,6 +23,8 @@ const rows = [
     disablePadding: false,
     label: 'Name',
     sort: true,
+    width: 300,
+
   },
   {
     id: 'type',
@@ -30,6 +32,8 @@ const rows = [
     disablePadding: false,
     label: 'Category Type',
     sort: true,
+    width: 200,
+
   },
   {
     id: 'action',
@@ -37,6 +41,7 @@ const rows = [
     disablePadding: false,
     label: 'Action',
     sort: true,
+    width: 200,
   },
 ];
 

@@ -9,11 +9,11 @@ import FuseLoading from '@fuse/core/FuseLoading';
 import { TableCell, TablePagination, TableRow, Button } from '@mui/material';
 import useSWR from 'swr';
 import CategoryTableHead from './CategoryTableHead';
-import {deleteCategory, openEditDialog, setCategoryList} from '../store/categorySlice';
+import { deleteCategory, openEditDialog, setCategoryList } from '../store/categorySlice';
 import AddCategoryDialog from './AddCategoryDialog';
 import { getCategory } from '../fetch-api/api';
 import CategoryConfirmDialog from './CategoryConfirmDialog';
-import EditCategoryDialog from "./EditCategoryDialog";
+import EditCategoryDialog from './EditCategoryDialog';
 
 function CategoryTable(props) {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ function CategoryTable(props) {
   const { categoryList, totalCount, searchText } = useSelector(({ Category }) => Category.category);
 
   const [data, setData] = useState(categoryList);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [open, setOpen] = useState(false);
   const [categoryID, setCategoryID] = useState(null);
@@ -56,7 +56,7 @@ function CategoryTable(props) {
     error,
     isLoading: myLoading,
   } = useSWR(
-    `admin/category/categories?page=${page}&limit=${rowsPerPage}&keyword=${searchText}`,
+    `admin/category/categories?page=${page + 1}&limit=${rowsPerPage}&keyword=${searchText}`,
     getCategory
   );
 
@@ -90,36 +90,41 @@ function CategoryTable(props) {
 
   return (
     <div className="w-full flex flex-col min-h-full">
-      <FuseScrollbars className="grow overflow-auto">
-        <Table className="min-w-xl" stickyHeader aria-labelledby="tableTitle">
-          <CategoryTableHead />
-          {data.map((item) => {
-            const { _id, name, image, type } = item;
-            return (
-              <TableRow key={_id}>
-                <TableCell className="p-4 md:p-16" padding="none">
-                  <img
-                    alt="hello"
-                    src={image}
-                    className="w-[50px] h-[50px]"
-                  />
-                </TableCell>
-                <TableCell className="p-4 md:p-16" padding="none">
-                  {name}
-                </TableCell>
-                <TableCell className="p-4 md:p-16" padding="none">
-                  {type}
-                </TableCell>
-                <TableCell className="p-4 md:p-16" padding="none">
-                  <Button className='static' variant="contained" color="primary" onClick={() => showModel(_id)}>
-                    Delete
-                  </Button>
-                  <Button className='static' onClick={() => dispatch(openEditDialog(item))}>Edit</Button>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </Table>
+      <FuseScrollbars className="grow">
+        <div className="w-full overflow-x-auto overflow-y-auto">
+          <Table stickyHeader aria-labelledby="tableTitle" style={{ minWidth: '600px' }}>
+            <CategoryTableHead />
+            {data.map((item) => {
+              const { _id, name, image, type } = item;
+              return (
+                <TableRow key={_id}>
+                  <TableCell className="p-4 md:p-16" padding="none">
+                    <img alt="hello" src={image} className="w-[50px] h-[50px]" />
+                  </TableCell>
+                  <TableCell className="p-4 md:p-16" padding="none">
+                    {name}
+                  </TableCell>
+                  <TableCell className="p-4 md:p-16" padding="none">
+                    {type}
+                  </TableCell>
+                  <TableCell className="p-4 md:p-16" padding="none">
+                    <Button
+                      className="static"
+                      variant="contained"
+                      color="primary"
+                      onClick={() => showModel(_id)}
+                    >
+                      Delete
+                    </Button>
+                    <Button className="static" onClick={() => dispatch(openEditDialog(item))}>
+                      Edit
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </Table>
+        </div>
       </FuseScrollbars>
 
       <TablePagination
