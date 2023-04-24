@@ -64,21 +64,21 @@ function ToolbarLayout1(props) {
           </div>
 
           <div className="flex items-center px-8 h-full overflow-x-auto">
-            <LanguageSwitcher />
+            {/*<LanguageSwitcher />*/}
 
             <AdjustFontSize />
 
             <FullScreenToggle />
 
-            <NavigationSearch />
+            {/*<NavigationSearch />*/}
 
             <Hidden lgUp>
               <ChatPanelToggleButton />
             </Hidden>
 
-            <QuickPanelToggleButton />
+            {/*<QuickPanelToggleButton />*/}
 
-            <NotificationPanelToggleButton />
+            {/*<NotificationPanelToggleButton />*/}
 
             <UserMenu />
           </div>

@@ -15,7 +15,7 @@ export const setUser = createAsyncThunk('user/setUser', async (user, { dispatch,
     settingsConfig.loginRedirectUrl = user.loginRedirectUrl; // for example 'apps/academy'
   }
 
-  history.push(`/example`);
+  // history.push(`/example`);
 
   return { displayName: user.name, role: 'Admin',  photoURL: 'assets/images/avatars/brian-hughes.jpg', email: 'johndoe@withinpixels.com', shortcuts: ['apps.calendar', 'apps.mailbox', 'apps.contacts', 'apps.tasks'],};
 });
