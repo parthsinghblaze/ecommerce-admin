@@ -9,12 +9,12 @@ i18next.addResourceBundle('ar', 'navigation', ar);
 
 const navigationConfig = [
   {
-    id: 'example-component',
-    title: 'Example',
-    translate: 'EXAMPLE',
+    id: 'dashboard',
+    title: 'Dashboard',
+    translate: 'Dashboard',
     type: 'item',
     icon: 'heroicons-outline:star',
-    url: 'example',
+    url: '/dashboard',
   },
   {
     id: 'category',
