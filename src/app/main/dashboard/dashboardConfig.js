@@ -8,7 +8,7 @@ const DashboardConfig = {
   },
   routes: [
     {
-      path: 'example',
+      path: '/dashboard',
       element: <Dashboard />,
     },
   ],

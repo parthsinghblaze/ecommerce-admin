@@ -243,8 +243,12 @@ const FusePageCarded = forwardRef((props, ref) => {
                 sidebarWidth={props.rightSidebarWidth}
               />
             )}
+
           </div>
         </div>
+        {
+          props.footer && <h1>I am footer</h1>
+        }
       </Root>
     </>
   );

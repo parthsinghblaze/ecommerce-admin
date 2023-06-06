@@ -13,7 +13,6 @@ function Category() {
     <FusePageCarded
       header={<CategoryHeader />}
       content={<CategoryTable />}
-      // scroll='content'
       scroll={isMobile ? 'page' : 'content'}
     />
   );
