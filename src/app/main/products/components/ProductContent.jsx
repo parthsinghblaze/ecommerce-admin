@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { useEffect, useState } from 'react';
 import ProductCard from './ProductCard';
-import { getProducts } from '../product-api/api';
+import {swrAxiosConfig} from '../product-api/api';
 import Button from "@mui/material/Button";
 
 function ProductContent() {
@@ -13,7 +13,7 @@ function ProductContent() {
     data: productData,
     error,
     isLoading,
-  } = useSWR(`admin/product/products?page=${pageNumber}&limit=${pageLimit}`, getProducts);
+  } = useSWR(`admin/product/products?page=${pageNumber}&limit=${pageLimit}`, swrAxiosConfig);
 
   useEffect(() => {
     if (productData) {

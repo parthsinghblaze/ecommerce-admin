@@ -4,6 +4,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { motion } from 'framer-motion';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
+import {Link} from "react-router-dom";
 
 function ProductHeader(props) {
   return (
@@ -41,8 +42,8 @@ function ProductHeader(props) {
         >
           <Button
             className=""
-            // component={Link}
-            // to="/apps/e-commerce/products/new"
+            component={Link}
+            to="/add-product"
             variant="contained"
             color="secondary"
             startIcon={<FuseSvgIcon>heroicons-outline:plus</FuseSvgIcon>}
