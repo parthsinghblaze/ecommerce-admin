@@ -5,10 +5,13 @@ import Typography from '@mui/material/Typography';
 import { motion } from 'framer-motion';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import {Link} from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
+import TableRowsIcon from '@mui/icons-material/TableRows';
+import GridViewIcon from '@mui/icons-material/GridView';
 
-function ProductHeader(props) {
+function ProductHeader({setCartView}) {
   return (
-    <div className="flex flex-col sm:flex-row space-y-16 sm:space-y-0 flex-1 w-full items-center justify-between py-32 px-24 md:px-32">
+    <div className="flex flex-col sm:flex-row space-y-16 sm:space-y-0 flex-1 w-full items-center justify-between py-10 px-24 md:px-32">
       <Typography
         component={motion.span}
         initial={{ x: -20 }}
@@ -51,6 +54,12 @@ function ProductHeader(props) {
             Add
           </Button>
         </motion.div>
+          <IconButton onClick={() => setCartView(true)}>
+              <GridViewIcon />
+          </IconButton>
+          <IconButton onClick={() => setCartView(false)}>
+              <TableRowsIcon />
+          </IconButton>
       </div>
     </div>
   );

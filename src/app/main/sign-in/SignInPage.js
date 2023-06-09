@@ -89,7 +89,7 @@ function SignInPage() {
           "url('https://images.pexels.com/photos/3695238/pexels-photo-3695238.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
       }}
     >
-      <div className="max-w-400 min-w-400 p-32 mx-auto sm:mx-0 p-5 bg-white">
+      <div className="max-w-400 min-w-400 p-32 mx-auto sm:mx-0 bg-white">
         <Typography className="mt-32 text-4xl font-extrabold tracking-tight leading-tight">
           Sign in
         </Typography>

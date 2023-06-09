@@ -2,7 +2,6 @@ import {Button, Card, CardActions, CardContent, CardMedia, Icon, Typography} fro
 import IconButton from "@mui/material/IconButton";
 
 function ProductCard({ productData }) {
-    console.log('product data', productData);
     const { images, category_name, name, description} = productData;
 
   return (
